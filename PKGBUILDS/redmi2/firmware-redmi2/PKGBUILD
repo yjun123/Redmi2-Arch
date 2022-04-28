@@ -1,0 +1,59 @@
+pkgbase=firmware-redmi2
+pkgname=("${pkgbase}" "${pkgbase}-modem-wt88047" "${pkgbase}-modem-wt86047")
+pkgrel=1
+_desc="Firmware files for Redmi2"
+arch=('any')
+url="https://github.com/yjun123/Redmi2-Arch"
+license=('custom')
+pkgver=1036.1
+options=(!strip)
+makedepends=('mtools')
+source=("https://releases.linaro.org/96boards/dragonboard410c/qualcomm/firmware/linux-board-support-package-r${pkgver}.zip"
+        "https://archive.org/download/lineage-15.1-20200223-nightly-wt88047-signed_202004/wt86047-firmware_20161223.zip"
+        "https://archive.org/download/lineage-15.1-20200223-nightly-wt88047-signed_202004/wt88047-firmware_V9.2.5.0.LHJMIEK.zip")
+noextract=('wt86047-firmware_20161223.zip'
+           'wt88047-firmware_V9.2.5.0.LHJMIEK.zip')
+md5sums=('3092fccf7a97fa319d7732a98425f9d4'
+         '9ae29765c80d20af715d4652f94116d0'
+         '350f50ff78e5f7a2c9184f6cd8c0f072')
+
+package_firmware-redmi2() {
+  pkgdesc="${_desc}"
+  depends=('linux-firmware-qcom' 'firmware-redmi2-modem')
+
+  cd ${srcdir}/linux-board-support-package-r${pkgver}
+  mkdir -p ${pkgdir}/usr/lib/firmware
+  cp -rv proprietary-linux/wlan ${pkgdir}/usr/lib/firmware
+  
+  mcopy -i bootloaders-linux/NON-HLOS.bin -p -m -v \
+		::image/wcnss.* "${pkgdir}/usr/lib/firmware"
+}
+
+package_firmware-redmi2-modem-wt88047() {
+  pkgdesc="Modem ${_desc}"
+  provides=("${pkgbase}-modem")
+  conflicts=("${pkgbase}-modem")
+
+  mkdir -p ${pkgname}
+  unzip wt88047-firmware_V9.2.5.0.LHJMIEK.zip -d ${pkgname}
+
+  cd ${srcdir}/${pkgname}
+  mkdir -p ${pkgdir}/usr/lib/firmware
+  mcopy -i firmware-update/NON-HLOS.bin -p -m -v \
+		::image/mba.mbn ::image/modem.* "${pkgdir}/usr/lib/firmware"
+
+}
+
+package_firmware-redmi2-modem-wt86047() {
+  provides=("${pkgbase}-modem")
+  conflicts=("${pkgbase}-modem")
+
+  mkdir -p ${pkgname}
+  unzip wt86047-firmware_20161223.zip -d ${pkgname}
+
+  cd ${srcdir}/${pkgname}
+  mkdir -p ${pkgdir}/usr/lib/firmware
+  mcopy -i firmware-update/NON-HLOS.bin -p -m -v \
+		::image/mba.mbn ::image/modem.* "${pkgdir}/usr/lib/firmware"
+}
+# vim:set ts=2 sw=2 et

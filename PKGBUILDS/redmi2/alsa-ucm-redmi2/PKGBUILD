@@ -1,0 +1,25 @@
+# Maintainer: Yjun <jerrysteve1101 at gmail dot com>
+pkgname=alsa-ucm-redmi2
+pkgver=0.1
+pkgrel=1
+pkgdesc="UCM files for Redmi2 (WT88047/WT88067)"
+arch=(any)
+url="https://github.com/msm8916-mainline/alsa-ucm-conf"
+license=('BSD')
+depends=('alsa-ucm-conf')
+provides=('alsa-ucm-wt88047' 'alsa-ucm-wt86047')
+source=(HiFi.conf wt88047.conf)
+package() {
+    install -D -m644 "$srcdir"/wt88047.conf \
+        "$pkgdir"/usr/share/alsa/ucm2/wt88047/wt88047.conf
+    install -D -m644 "$srcdir"/HiFi.conf \
+        "$pkgdir"/usr/share/alsa/ucm2/wt88047/HiFi.conf
+    ln -s wt88047 "$pkgdir"/usr/share/alsa/ucm2/Redmi2
+
+    mkdir -p "$pkgdir"/usr/share/alsa/ucm2/conf.d/simple-card
+    ln -sf ../../wt88047/wt88047.conf \
+        "$pkgdir"/usr/share/alsa/ucm2/conf.d/simple-card/Redmi2.conf
+}
+
+md5sums=('016880a59f25d6e159b70b66ff766738'
+         '29a8ea0559084977cce905fc8a52d2a5')
