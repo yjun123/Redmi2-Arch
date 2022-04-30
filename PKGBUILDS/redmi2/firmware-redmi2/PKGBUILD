@@ -1,3 +1,5 @@
+# Maintainer: Yjun <jerrysteve1101 at gmail dot com>
+
 pkgbase=firmware-redmi2
 pkgname=("${pkgbase}" "${pkgbase}-modem-wt88047" "${pkgbase}-modem-wt86047")
 pkgrel=1
