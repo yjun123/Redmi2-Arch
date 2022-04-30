@@ -1,10 +1,14 @@
-# Arch Linux ARM on Mobile
+# Arch Linux ARM on Redmi 2 (WT88047/WT86047)
 
-This repository contains PKGBUILDS that makes Arch Linux ARM runs on mobile.
+This repository contains PKGBUILDS that makes Arch Linux ARM runs on Redmi 2 (WT88047/WT86047).
 
-Currently only supports PinePhone and PineTab. Images for these can be found [here](https://github.com/dreemurrs-embedded/Pine64-Arch/releases).
+## Packages for Redmi2 (WT88047/WT86047)
 
-## Join the community
- * Matrix: #archmobile:kde.org
- * Telegram: @archlinux_pinephone
- * Forum: https://forum.pine64.org/forumdisplay.php?fid=159
+```
+alas-ucm-redmi2
+device-xiaomi-redmi2
+firmware-redmi2
+firmware-redmi2-modem-wt88047
+firmware-redmi2-modem-wt86047
+linux-msm8916
+```
