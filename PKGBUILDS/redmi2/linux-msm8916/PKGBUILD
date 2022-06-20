@@ -5,18 +5,20 @@
 # https://github.com/archlinuxarm/PKGBUILDs/blob/master/core/linux-aarch64/PKGBUILD
 
 pkgbase=linux-msm8916
-_srcname=linux
-_commit=183953
+_commit=2ae7e65
 _kernelname=${pkgbase#linux}
 _desc="Linux mainline kernel fork for many Qualcomm MSM8916/APQ8016 devices"
-pkgver=5.17.0
+pkgver=5.18.0
+_srcname=linux-${pkgver%.*}-msm8916
 pkgrel=1
 arch=('aarch64')
 url="https://github.com/msm8916-mainline/linux"
 license=('GPL2')
 makedepends=('xmlto' 'docbook-xsl' 'kmod' 'inetutils' 'bc' 'git' 'uboot-tools' 'vboot-utils' 'dtc')
 options=('!strip')
-source=("git+https://hub.fastgit.xyz/msm8916-mainline/linux#commit=${_commit}#branch=master"
+source=(
+        # "git+https://hub.fastgit.xyz/msm8916-mainline/linux#commit=${_commit}#branch=master"
+        "linux-${pkgver%.*}-msm8916.tar.gz::${url}/archive/refs/tags/v${pkgver%.*}-msm8916.tar.gz"
         'config'
         'linux.preset'
         '60-linux.hook'
@@ -24,7 +26,7 @@ source=("git+https://hub.fastgit.xyz/msm8916-mainline/linux#commit=${_commit}#br
         '01-make-proc-cpuinfo-consistent-on-arm64-and-arm.patch'
 )
 
-md5sums=('SKIP'
+md5sums=('b8e3e6d25058229005b52eee17535628'
          '915a1f889b1a0b3ca29e0a8f8488bf07'
          '30130b4dcd8ad4364ddbfd56c3058d5e'
          'ce6c81ad1ad1f8b333fd6077d47abdaf'
@@ -42,6 +44,8 @@ prepare() {
 
   # add upstream patch
   # git apply --whitespace=nowarn ../patch-${pkgver}
+
+  # MSM8916: arm64: dts: msm8916: Enable SMP without PSCI for MSM8916 devices
 
   # ALARM patches
   git apply ../01-make-proc-cpuinfo-consistent-on-arm64-and-arm.patch
