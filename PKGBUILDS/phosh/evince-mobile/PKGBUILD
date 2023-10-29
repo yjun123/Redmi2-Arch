@@ -5,37 +5,58 @@
 
 _pkgname=evince
 pkgname=$_pkgname-mobile
-pkgver=42.3
+pkgver=45.0
 pkgrel=1
 pkgdesc="Document viewer (PDF, PostScript, XPS, djvu, dvi, tiff, cbr, cbz, cb7, cbt)"
 url="https://wiki.gnome.org/Apps/Evince"
 arch=('x86_64' 'armv7h' 'aarch64')
 license=('GPL')
-_commit=0ff17893679b05e7635e76e5c77384995b802f81  # tags/42.3^0
+depends=(
+  dconf
+  djvulibre
+  gnome-desktop
+  gsettings-desktop-schemas
+  gsfonts
+  gspell
+  gst-plugins-base-libs
+  gtk3
+  gvfs
+  libarchive
+  libgxps
+  libhandy
+  libsecret
+  libspectre
+  libsynctex
+  libxml2
+  poppler-glib
+)
+makedepends=(
+  appstream-glib
+  gi-docgen
+  git
+  gobject-introspection
+  meson
+  texlive-bin
+  yelp-tools
+)
+optdepends=('texlive-bin: DVI support')
+provides=(libev{document,view}3.so $_pkgname)
+conflicts=($_pkgname)
+_commit=80b393cac6468561664810d5e4a0f1897507062b  # tags/45.0^0
 source=("git+https://gitlab.gnome.org/GNOME/evince.git#commit=$_commit"
         '0001-toolbar-Allow-to-toggle-the-sidebar-button.patch'
         '0002-toolbar-Allow-hiding-zoom-annotation-and-page-widgets.patch'
         '0003-properties-view-Reduce-the-label-width-chars.patch'
         '0004-window-Port-it-to-phones.patch')
 sha256sums=('SKIP'
-            '39cf66991132953400d6825d4aa671dabe37538ac543ddd5ccce73d6217927c2'
-            '70274e065c512593d6f82865e48090c2ec9440fbfbfcfb505fa0e99731de3f39'
-            '9573069449b6eeca2157fb55976bed217076427c23863870159ce83ef4727539'
-            'b81b9747537fb478e5bdb056062211d2ed2c5dd43b2afa75fc3ddae2667da6a0')
-provides=(libev{document,view}3.so $_pkgname $_pkgname-lib-docs)
-conflicts=($_pkgname)
-depends=(gtk3 libgxps libspectre gsfonts poppler-glib djvulibre dconf libsecret libsynctex
-         gsettings-desktop-schemas gnome-desktop libarchive gst-plugins-base-libs gspell libhandy
-         gvfs)
-makedepends=(libnautilus-extension texlive-bin gobject-introspection gi-docgen git meson
-             appstream-glib yelp-tools)
-optdepends=(
-  'texlive-bin: DVI support'
-)
+            '22a5c037d60cce4869193a294f90c071dab2a47ff97f9632eb22ba0f8377b4a0'
+            '0153d21c3da3a65c28c246bc31a44b307c1af4e6e56f897b8e8ec15b92974df3'
+            'b184beef8d11f3d1196869744865b94343b75440f326582e51cb7fb3f4beb176'
+            'f125e441c0d5cc80599859347903f6b3e1d82cab25b30df508ed0bb6892c8a45')
 
 pkgver() {
   cd $_pkgname
-  git describe --tags | sed 's/-/+/g'
+  git describe --tags | sed 's/[^-]*-g/r&/;s/-/+/g'
 }
 
 prepare() {
@@ -52,7 +73,11 @@ prepare() {
 }
 
 build() {
-  arch-meson $_pkgname build -D ps=enabled
+  local meson_options=(
+    -D ps=enabled
+  )
+
+  arch-meson $_pkgname build "${meson_options[@]}"
   meson compile -C build
 }
 
@@ -62,4 +87,7 @@ check() {
 
 package() {
   meson install -C build --destdir "$pkgdir"
+
+  # We don't need to provide evince-lib-docs.
+  rm -r "$pkgdir"/usr/share/doc/lib*
 }

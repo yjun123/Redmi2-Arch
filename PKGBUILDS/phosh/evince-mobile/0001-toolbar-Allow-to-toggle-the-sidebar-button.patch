@@ -10,10 +10,10 @@ closing the sidebar in the next commit.
  2 files changed, 17 insertions(+)
 
 diff --git a/shell/ev-toolbar.c b/shell/ev-toolbar.c
-index 75306a7..633102d 100644
+index bb20887..6c5521f 100644
 --- a/shell/ev-toolbar.c
 +++ b/shell/ev-toolbar.c
-@@ -392,3 +392,17 @@ ev_toolbar_get_mode (EvToolbar *ev_toolbar)
+@@ -264,3 +264,17 @@ ev_toolbar_get_mode (EvToolbar *ev_toolbar)
  
          return priv->toolbar_mode;
  }
@@ -32,7 +32,7 @@ index 75306a7..633102d 100644
 +	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->sidebar_button), visible);
 +}
 diff --git a/shell/ev-toolbar.h b/shell/ev-toolbar.h
-index 432563e..66414f9 100644
+index 6cb8ae4..1b15e80 100644
 --- a/shell/ev-toolbar.h
 +++ b/shell/ev-toolbar.h
 @@ -58,4 +58,7 @@ void          ev_toolbar_set_mode           (EvToolbar     *ev_toolbar,

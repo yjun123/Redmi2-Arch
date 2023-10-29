@@ -1,16 +1,17 @@
 # Maintainer: Danct12 <danct12@disroot.org>
 pkgname=portfolio-file-manager
-pkgver=0.9.14
+pkgver=1.0.0
 pkgrel=1
 pkgdesc="A minimalist file manager for those who want to use Linux mobile devices."
 url="https://github.com/tchx84/Portfolio"
 license=('GPL3')
 arch=('any')
-depends=('python' 'gtk3' 'libhandy' 'python-gobject')
+depends=('python' 'gtk4' 'libadwaita' 'python-gobject')
 makedepends=('meson')
 checkdepends=('python-pytest' 'xorg-server-xvfb')
 replaces=('portfolio-fm')
 source=(Portfolio-${pkgver}.tar.gz::https://github.com/tchx84/Portfolio/archive/v${pkgver}.tar.gz)
+sha512sums=('bbb724a6c9b0e76fb8bd8bc91241ea85c64e8c27ad3015f4d0bb02b9f2896ebea3b8bba7cf8c3241d0a6801904ddbed432dfb1973f7a3944965c6efd97970819')
 
 build() {
     arch-meson Portfolio-${pkgver} output
@@ -26,4 +27,4 @@ package() {
     DESTDIR="${pkgdir}" ninja -C output install
 }
 
-sha512sums=('d69b12751647006841c1025e752befc505238ffca856a0cb5fd771052ded6cdea021c2ff7c629bdfd6b7c550fb93adb0224b0a9d7449ada54068eea23f60ca8f')
+

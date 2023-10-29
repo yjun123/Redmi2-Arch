@@ -1,39 +1,26 @@
 # Maintainer: Danct12 <danct12@disroot.org>
 pkgname=phoc
-pkgver=0.20.0
-pkgrel=2
-pkgdesc="A compositor for phones based on wlroots"
+pkgver=0.32.0
+pkgrel=1
+pkgdesc="wlroots based Wayland compositor for mobile phones"
 arch=('x86_64' 'armv7h' 'aarch64')
 url="https://gitlab.gnome.org/World/Phosh/phoc"
 license=('GPL')
-depends=('gobject-introspection' 'gnome-desktop' 'libinput' 'seatd' 'mutter'
-         'xcb-util-errors' 'xcb-util-renderutil' 'xcb-util-wm' 'wayland-protocols'
-         'libvulkan.so')
+depends=('gobject-introspection' 'gnome-desktop' 'libinput' 'libglvnd' 'seatd' 'mutter' 'libxcb'
+         'xcb-util-errors' 'xcb-util-renderutil' 'xcb-util-wm' 'wayland-protocols' 'libvulkan.so')
 makedepends=('git' 'meson' 'ninja' 'glslang' 'vulkan-headers')
 checkdepends=('xorg-server-xvfb')
-_commit="b686cc5010a8d0f9a654a8171e90415e0717e10c"
-_commit_wlroots="1f8bb9e0e3058fc31a14866dc52e8f83c1287a09"
-source=("git+https://gitlab.gnome.org/World/Phosh/phoc.git#commit=${_commit}"
-        "wlroots-phoc::git+https://source.puri.sm/Librem5/wlroots.git#commit=${_commit_wlroots}"
-        'cursor-avoid-null-pointer-dereference.patch')
+_commit="7c5840f6f14853ad362b52799650966f7a8c864a"  # tags/0.32.0
+source=("git+https://gitlab.gnome.org/World/Phosh/phoc.git#commit=${_commit}")
 
 pkgver() {
   cd $pkgname
   git describe --tags | sed 's/^v//;s/-/+/g'
 }
 
-prepare() {
-  cd $pkgname
-
-  git submodule init subprojects/wlroots
-  git submodule set-url subprojects/wlroots "$srcdir/wlroots-phoc"
-  git submodule update
-
-  patch -p1 < "$srcdir/cursor-avoid-null-pointer-dereference.patch"
-}
-
 build() {
   local meson_options=(
+    --wrap-mode default
     -D embed-wlroots=enabled
     --default-library=static
   )
@@ -43,11 +30,11 @@ build() {
 }
 
 check() {
-  xvfb-run -s -noreset meson test -C build --print-errorlogs
+  WLR_RENDERER=pixman xvfb-run ninja -C build test
 }
 
 package() {
-  meson install -C build --destdir "$pkgdir"
+  DESTDIR="$pkgdir" ninja install -C build
 
   # Install scale-to-fit helper
   install -Dm755 "$pkgname"/helpers/scale-to-fit "$pkgdir"/usr/bin/scale-to-fit
@@ -57,6 +44,4 @@ package() {
   rm -r "$pkgdir"/usr/include
 }
 
-sha256sums=('SKIP'
-            'SKIP'
-            '8bb1c3a67f167afe974cb2682ae6e3273e606e8fa7deaba829cdda70d144294e')
+sha256sums=('SKIP')

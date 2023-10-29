@@ -4,63 +4,115 @@
 
 _pkgname=gnome-control-center
 pkgname=gnome-control-center-mobile
-pkgver=42.2
+pkgver=45.0+r41+g454955aad
 pkgrel=1
 pkgdesc="GNOME's main interface to configure various aspects of the desktop - Purism fork"
 url="https://gitlab.gnome.org/GNOME/gnome-control-center"
-license=(GPL2)
+license=(GPL3)
 arch=(x86_64 armv7h aarch64)
-depends=(accountsservice cups-pk-helper gnome-bluetooth-3.0 gnome-desktop-4
-         gnome-online-accounts gnome-settings-daemon gsettings-desktop-schemas
-         gtk4 libgtop libnma-gtk4 sound-theme-freedesktop upower libpwquality
-         gnome-color-manager smbclient libmm-glib libgnomekbd libibus libgudev
-         bolt udisks2 libadwaita gsound colord-gtk4 gcr modemmanager)
-makedepends=(docbook-xsl git python meson)
-checkdepends=(python-dbusmock python-gobject xorg-server-xvfb)
-optdepends=('system-config-printer: Printer settings'
-            'gnome-user-share: WebDAV file sharing'
-            'gnome-remote-desktop: screen sharing'
-            'rygel: media sharing'
-            'openssh: remote login'
-            'power-profiles-daemon: Power profiles support')
+depends=(
+  accountsservice
+  bolt
+  cairo
+  colord-gtk4
+  cups-pk-helper
+  dconf
+  fontconfig
+  gcr
+  gdk-pixbuf2
+  glib2
+  gnome-bluetooth-3.0
+  gnome-color-manager
+  gnome-desktop-4
+  gnome-online-accounts
+  gnome-settings-daemon
+  gnutls
+  gsettings-desktop-schemas
+  gsound
+  gtk3
+  gtk4
+  hicolor-icon-theme
+  krb5
+  libadwaita
+  libcolord
+  libcups
+  libepoxy
+  libgnomekbd
+  libgoa
+  libgtop
+  libgudev
+  libibus
+  libmm-glib
+  libnm
+  libnma-gtk4
+  libpulse
+  libpwquality
+  libsecret
+  libwacom
+  libx11
+  libxi
+  libxml2
+  modemmanager
+  pango
+  polkit
+  smbclient
+  sound-theme-freedesktop
+  tecla
+  udisks2
+  upower
+)
+makedepends=(
+  docbook-xsl
+  git
+  meson
+  python
+)
+checkdepends=(
+  python-dbusmock
+  python-gobject
+  xorg-server-xvfb
+)
+optdepends=(
+  'fwupd: device security panel'
+  'gnome-remote-desktop: screen sharing'
+
+  # Cannot be a depend because when gnome-shell checkdepends on
+  # gnome-control-center depends on gnome-shell depends on libmutter-12.so, it
+  # makes building gnome-shell against libmutter-13.so impossible
+  'gnome-shell: multitasking panel'
+
+  'gnome-user-share: WebDAV file sharing'
+  'networkmanager: network settings'
+  'openssh: remote login'
+  'power-profiles-daemon: power profiles'
+  'rygel: media sharing'
+  'system-config-printer: printer settings'
+)
 provides=(gnome-control-center)
 conflicts=(gnome-control-center)
-_commit=0bbcc3b8b30583908be7ec129b63bb40d8697b7b  # tags/42.2^0
-source=("git+https://gitlab.gnome.org/GNOME/gnome-control-center.git#commit=$_commit"
-        "git+https://gitlab.gnome.org/GNOME/libgnome-volume-control.git"
-        # purism
-        0001-avatar-chooser-Adapt-to-work-on-librem5.patch
-        0002-datetime-Fix-timezone-selection-map.patch
-        0003-display-Request-a-smaller-size-for-arrangment-widget.patch
-        0005-power-show-brightness-slider-in-a-separate-row.patch
-        0006-sound-fix-test-dialog-on-small-screen.patch
-        Add-patches-to-check-if-phone.patch
-        network-connection-editor-Allow-dialog-to-resize.patch
-        0002-UserAccount-fix-window-resizing-issue.patch
-        # mobian
-        0004-power-add-more-suspend-timing-options.patch
-        resize-connection-editor.patch
-        # upstream
-        0001-common-Wrap-CcPermissionInfobar-labels-to-fit-in-nar.patch
-        0001-display-Wrap-Night-Light-GtkInfoBar-label-to-fit-in-.patch
-        0001-printers-Wrap-job-dialog-GtkInfoBar-label-to-fit-in-.patch
-        0001-removable-media-Wrap-GtkCheckButton-label-to-fit-nar.patch)
+_commit=454955aada03e4674751d662ad13d26c80484c6f  # gnome-45
+source=(
+  "git+https://gitlab.gnome.org/GNOME/gnome-control-center.git#commit=$_commit"
+  "git+https://gitlab.gnome.org/GNOME/libgnome-volume-control.git"
+  'pixmaps-dir.diff'
+  # purism
+  '0001-avatar-chooser-Adapt-to-work-on-librem5.patch'
+  '0005-power-show-brightness-slider-in-a-separate-row.patch'
+  'Add-patches-to-check-if-phone.patch'
+  'network-connection-editor-Allow-dialog-to-resize.patch'
+  # mobian
+  '0004-power-add-more-suspend-timing-options.patch'
+  'resize-connection-editor.patch'
+)
 sha256sums=('SKIP'
             'SKIP'
-            '1170038f625f00ac2443cd593be0da9adbb0a2a0977dc775ba81a19b31d6444d'
-            'c4571ada3ed0d37aca5072b87605b854f501c7f50b81530018ad6394ce9285f1'
-            '75cef56c6d81b702c9d0bfcc6c47c041e19d2dbf47f5d25129771e41eaedfe53'
-            'c7774bab64278759f0397996b04788bb5e3ad775c830c2efbd68b2a29f7cad04'
-            '3d22e83c95f59cab92320d412918639f4c4fc8830832c8becbfa381dbb34c9aa'
-            '30d9a86b2c3f0a3c41de57c0aed311023a70b3bc89be7547133ac646c20abf73'
-            '20a7b6df2932ef3ab4bfb2073d306fb04693fb81fc91f8ec98e4d565d6d78011'
-            '8708c8ba1df9b640f61d49ce28a3ea9610eba1ab290be5bf6b1136176db4a7ec'
-            '8fa599ef61a759dcebbb86db1b4c079532db1749c913b32a170bdeea28c43865'
-            '5c5110daef890b354845497522450f396c246053fab5bd8c1d80708f400b8fcb'
-            '36fbef62590ecaeffa56de996703acf6a58c4d47d2c97518db238852555ef393'
-            'c6096dc4d6a694ec66785bf96202bce88309d7e1cae7ef087c1ee55d4a1e7156'
-            '3a706ee02dbf5ec51cde8260b0d4dd6e51d0e0f3f34ff2434999e3a6ec19d9dc'
-            '9b0e092f5af3190c348eb5d72594f9345b7320d19e38b9c6e5f4c4f10ae67e27')
+            '8695bc08c06026b7bfdd43941b4e07bb3ffbaa4e709be0b23ee138d24b6dbc8f'
+            '062e53654e8662ed53743b4c652b7b41c5c2993a713337626c832d0af3eda015'
+            'e51f740175e82d6a399080dfb514b95923dc9b1230b447df2a47c1f7e24ef3e9'
+            '09e36b0aa2c40d6b6f5be11fd9617223d5b142ff8b50db6fce0eeebc63007327'
+            '644b076297beba48a1d2752121c4c0cca143b12ae5e737d1b4e2ee2fb8abb5f7'
+            '36696693a2fa7ba74ec6d5b94d97f5dbafbec14b16af3d832395a55d382f0a1f'
+            '6bef98e21e0ab11e24ddcdab94771e22c37978b34ba3d0c3029822e5594aaf93')
 
 pkgver() {
   cd ${_pkgname}
@@ -71,11 +123,11 @@ prepare() {
   cd ${_pkgname}
 
   # Install bare logos into pixmaps, not icons
-  sed -i "/install_dir/s/'icons'/'pixmaps'/" panels/info-overview/meson.build
+  git apply -3 ../pixmaps-dir.diff
 
   git submodule init subprojects/gvc
   git submodule set-url subprojects/gvc "$srcdir/libgnome-volume-control"
-  git submodule update
+  git -c protocol.file.allow=always submodule update
 
   local src
   for src in "${source[@]}"; do
@@ -97,7 +149,8 @@ build() {
 }
 
 check() {
-  meson test -C build --print-errorlogs
+  GTK_A11Y=none dbus-run-session xvfb-run -s '-nolisten local +iglx -noreset' \
+    meson test -C build --print-errorlogs
 }
 
 package() {
