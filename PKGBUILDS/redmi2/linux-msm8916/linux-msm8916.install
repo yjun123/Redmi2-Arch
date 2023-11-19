@@ -5,6 +5,6 @@ post_upgrade() {
 }
 
 post_remove() {
-  rm -f boot/initramfs-linux-openstick.img
-  rm -f boot/initramfs-linux-openstick-fallback.img
+  rm -f boot/initramfs-linux-msm8916.img
+  rm -f boot/initramfs-linux-msm8916-fallback.img
 }
